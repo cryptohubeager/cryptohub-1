@@ -1,5 +1,36 @@
 function generateApi(query){
     console.log(query)
+    $.ajax({
+        url : (`http://localhost:3000/news/show/${query}&pageSize=5`),
+        type : 'get',
+        dataTypes : 'json'
+    })
+    .done(data => {
+        // console.log(data)
+        $.each(data.articles, (i, eachData) => {
+            $('#list').append(`
+            <div class="row">
+                <div class="col s12 m7">
+                <div class="card">
+                    <div class="card-image">
+                    <img src="${eachData.urlToImage}">
+                    <span class="card-title">${eachData.title}</span>
+                    </div>
+                    <div class="card-content">
+                    <h4> ${eachData.title} </h4>
+                    <small>${eachData.author}</small>
+                    <p> ${eachData.content} </p>
+                    </div>
+                    <div class="card-action">
+                    <a href="${eachData.url}">Click here to read full News</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            `)
+        })
+    })
+    .fail()
 }
 
 function getCoinData(){
@@ -12,6 +43,7 @@ function getCoinData(){
         }
     })
     .done(function(response){
+        $('#list').empty()
         console.log(response)
         $('#crypto-content').html('')
         for(let crypto of response){
@@ -190,6 +222,41 @@ function signOut() {
       console.log('User signed out.');
     });
   }
+/* show all news */
+
+function showAll(){
+    $.ajax({
+        url : ('http://localhost:3000/news/show/crypto'),
+        type : 'get',
+        dataTypes : 'json'
+    })
+    .done(data => {
+        // console.log(data)
+        $.each(data.articles, (i, eachData) => {
+            $('#list').append(`
+            <div class="row">
+                <div class="col s12 m7">
+                <div class="card">
+                    <div class="card-image">
+                    <img src="${eachData.urlToImage}">
+                    <span class="card-title">${eachData.title}</span>
+                    </div>
+                    <div class="card-content">
+                    <h4> ${eachData.title} </h4>
+                    <small>${eachData.author}</small>
+                    <p> ${eachData.content} </p>
+                    </div>
+                    <div class="card-action">
+                    <a href="${eachData.url}">This is a link</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            `)
+        })
+    })
+    .fail()
+}
 
 $(document).ready(function(){
     console.log('Ready')
@@ -200,7 +267,6 @@ $(document).ready(function(){
         $('#logout-button').hide()
     }
     else{
-        
         $('.login').hide()
         $('.register').hide()
         $('#register-button').hide()
@@ -208,5 +274,7 @@ $(document).ready(function(){
         $('#logout-button').show()
         $('.content-web').show()
         getCoinData()
+        // showAll()
+        // showNews()
     }
 })
