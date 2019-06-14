@@ -1,3 +1,64 @@
+function generateApi(query){
+    console.log(query)
+}
+
+function getCoinData(){
+    console.log('masuk brooo');
+    $.ajax({
+        url:'http://localhost:3000/api/crypto',
+        method:'GET',
+        beforeSend:function(xhr){
+            xhr.setRequestHeader('token', localStorage.getItem('token'))
+        }
+    })
+    .done(function(response){
+        console.log(response)
+        $('#crypto-content').html('')
+        for(let crypto of response){
+            let object = crypto.quote
+            let keys = Object.keys(object)
+            let slug = crypto.slug
+            $.ajax({
+                url:'http://localhost:3000/api/cryptometa',
+                method:'POST',
+                data:{
+                    slug:slug
+                },
+                beforeSend:function(xhr){
+                    xhr.setRequestHeader('token', localStorage.getItem('token'))
+                }
+            })
+            .done((response) => {
+                console.log(crypto.id)
+                // console.log(response[crypto.id].logo)
+                $('#crypto-content').append(` <li class="collection-item avatar">
+                <img src="${response[crypto.id].logo}" alt="" class="circle">
+                <span class="title">${crypto.name} [${crypto.symbol}]</span>
+                <p>Price in ${keys[0]} ${crypto.quote[keys[0]].price} <br>
+                </p>
+                <a href="#!" class="secondary-content waves-effect waves-light btn" onclick="generateApi('${crypto.name}')">Insight<i class="material-icons">chevron_right</i></a>
+                </li>`)
+            })
+            .fail((jqXHR,textStatus) => {
+                const errMsg = jqXHR.responseJSON.message
+                Swal.fire({
+                    type:'error',
+                    text:errMsg,
+                })
+            })
+            // console.log(`${crypto.quote[keys[0]].price}`)
+        } 
+    })
+    .fail(function(jqXHR,textStatus){
+        const errMsg = jqXHR.responseJSON.message
+        Swal.fire({
+            type:'error',
+            text:errMsg,
+        })
+    })
+
+}
+
 $('#register-form').click(function(event){
     event.preventDefault()
     const email = $('#email-register').val()
@@ -38,6 +99,7 @@ $('#logout-button').click(function(event){
     $('#logout-button').hide()
     $('.register').show()
     $('#login-button').show()
+    signOut()
 })
 
 $('#login-form').click(function(event){
@@ -91,6 +153,44 @@ $('#register-button').click(function(){
     $('#register-button').hide()
 })
 
+function onSignIn(googleUser) {
+    console.log('masuk');
+    const idToken= googleUser.getAuthResponse().id_token
+    $.ajax({
+        url: `http://localhost:3000/glogin`,
+        type: 'post',
+        data: {
+           idToken
+        }
+    })
+    .done(function(data){
+        if (!localStorage.getItem('token')) {
+            Swal.fire({
+                type:'success',
+                title: "Welcome back to cryptohub",
+            })
+        }
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('name', data.name)
+        $('.register').hide()
+        $('.login').hide()
+        $('#login-button').hide()
+        $('#register-button').hide()
+        $('#logout-button').show()
+        $('.content-web').show()
+    })
+    .fail(function(err){
+        console.log(err)
+    })
+}
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+
 $(document).ready(function(){
     console.log('Ready')
     if(!localStorage.getItem('token')){
@@ -100,11 +200,13 @@ $(document).ready(function(){
         $('#logout-button').hide()
     }
     else{
+        
         $('.login').hide()
         $('.register').hide()
         $('#register-button').hide()
         $('#login-button').hide()
         $('#logout-button').show()
         $('.content-web').show()
+        getCoinData()
     }
 })
