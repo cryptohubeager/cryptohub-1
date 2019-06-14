@@ -9,9 +9,9 @@ class YoutubeController {
 		let date = new Date()
 		date.setMonth(date.getMonth()-5)
 		let searchDate = date.toISOString()
-		
+
 		ax
-			.get(`/search?part=snippet&maxResults=5&publishedAfter=${searchDate}&q=${req.params.keyword}&relevanceLanguage=en&type=video&videoDuration=medium&key=${process.env.YOUTUBE_API_KEY}`)			
+			.get(`/search?part=snippet&maxResults=4&publishedAfter=${searchDate}&q=${req.params.keyword}&relevanceLanguage=en&type=video&videoDuration=medium&key=${process.env.YOUTUBE_API_KEY}`)			
 			.then(({data}) => {
 				// res.json(200).json(data)
 				res.status(200).json(data)

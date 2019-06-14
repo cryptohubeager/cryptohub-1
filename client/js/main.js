@@ -297,7 +297,7 @@ function listVideo(coin) {
                     let title = arr[i].snippet.title
                     let description = arr[i].snippet.description
                     let channel = arr[i].snippet.channelTitle
-                    listVideos += `<div class="card" style="width: 18rem;">
+                    listVideos += `<div class="col-sm-3 card" style="width: 18rem;">
                     <iframe src="https://www.youtube.com/embed/${link}"></iframe>
                     <div class="card-body">
                     <h5 class="card-title">${title}</h5>
@@ -308,7 +308,7 @@ function listVideo(coin) {
                 }
     
                 // <a href="https://www.youtube.com/watch?v=${link}" class="btn btn-primary">Watch on YouTube</a>
-                $('.card').remove()
+                $('.col-sm-3').remove()
                 $('#videos').append(listVideos)
                 saveVideo()
             })
