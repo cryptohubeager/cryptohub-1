@@ -1,7 +1,7 @@
 function generateApi(query){
     console.log(query)
     $.ajax({
-        url : (`http://localhost:3000/news/show/${query}`),
+        url : (`http://localhost:3000/news/show/${query}&pageSize=5`),
         type : 'get',
         dataTypes : 'json'
     })
@@ -22,7 +22,7 @@ function generateApi(query){
                     <p> ${eachData.content} </p>
                     </div>
                     <div class="card-action">
-                    <a href="${eachData.url}">This is a link</a>
+                    <a href="${eachData.url}">Click here to read full News</a>
                     </div>
                 </div>
                 </div>
@@ -43,6 +43,7 @@ function getCoinData(){
         }
     })
     .done(function(response){
+        $('#list').empty()
         console.log(response)
         $('#crypto-content').html('')
         for(let crypto of response){
