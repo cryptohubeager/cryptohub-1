@@ -49,5 +49,21 @@ class Controller{
             })
         })
     }
+
+    static exchange(req, res) {
+        axios({
+            method: 'get',
+            url: `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${req.params.symbol}&convert=IDR`,
+            headers: {'X-CMC_PRO_API_KEY': `1d0a0b91-0d1a-4619-acf4-51b7a0ac24ba`}
+        })
+        .then(({data}) => {
+            res.status(200).json(data)
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: err
+            })
+        })
+    }
 }
 module.exports = Controller

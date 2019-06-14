@@ -102,29 +102,34 @@ function getCoinData(){
     .done(function(response){
         $('#list').empty()
         console.log(response)
+        // console.log(response)
         $('#crypto-content').html('')
         for(let crypto of response){
             let object = crypto.quote
             let keys = Object.keys(object)
             let slug = crypto.slug
+            let symbol = crypto.symbol
             $.ajax({
                 url:'http://localhost:3000/api/cryptometa',
                 method:'POST',
                 data:{
-                    slug:slug
+                    slug:slug,
+                    symbol:symbol
                 },
                 beforeSend:function(xhr){
                     xhr.setRequestHeader('token', localStorage.getItem('token'))
                 }
             })
             .done((response) => {
-                console.log(crypto.id)
+                // console.log(response)
+                // console.log(crypto.id)
                 // console.log(response[crypto.id].logo)
                 $('#crypto-content').append(` <li class="collection-item avatar">
                 <img src="${response[crypto.id].logo}" alt="" class="circle">
                 <span class="title">${crypto.name} [${crypto.symbol}]</span>
                 <p>Price in ${keys[0]} ${crypto.quote[keys[0]].price} <br>
                 </p>
+                <a href="#!" class="secondary-content waves-effect waves-light btn" style="margin-right: 10%" onclick="convert('${crypto.symbol}')">Converter<i class="material-icons">chevron_right</i></a>
                 <a href="#!" class="secondary-content waves-effect waves-light btn" onclick="generateApi('${crypto.name}')">Insight<i class="material-icons">chevron_right</i></a>
                 </li>`)
             })
@@ -146,6 +151,65 @@ function getCoinData(){
         })
     })
 
+}
+
+function convert (symbol) {
+    event.preventDefault()
+    $('#convert-title').show()
+    $('#convert').empty()
+    $('#convert').show()
+    console.log(symbol)
+    $.ajax({
+        url:`http://localhost:3000/api/crypto/convert/${symbol}`,
+        method:'GET',
+        beforeSend:function(xhr){
+            xhr.setRequestHeader('token', localStorage.getItem('token'))
+        }
+    })
+    .done(function(response) {
+        console.log(response)
+        let dataPrice = response.data[`${symbol}`].quote.IDR
+        // console.log(dataPrice.price)
+        $('#convert').append(`
+        <li class="collection-item avatar">
+            <span class="title">${response.data[`${symbol}`].name} [${response.data[`${symbol}`].symbol}] TO IDR</span>
+            <p>Price : IDR ${dataPrice.price}</p>
+            <div class="row">
+                <form class="col s12">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input placeholder="Try our crypto converter" type="number" id="coin" class="validate">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <a href="#!" class="secondary-content waves-effect waves-light btn" onclick="countConvert(${dataPrice.price})">Convert<i class="material-icons">chevron_right</i></a>
+        </li> 
+        `)
+    })
+    .fail(function(jqXHR,textStatus){
+        const errMsg = jqXHR.responseJSON.message
+        Swal.fire({
+            type:'error',
+            text:errMsg,
+        })
+    })
+}
+
+function countConvert(price) {
+    event.preventDefault()
+    $('#convert-title').show()
+    $('#convert').show()
+    let coin = $('#coin').val()
+    // console.log(coin,'ini coin')
+    let convertResult = 0
+    convertResult = coin * price
+    // console.log(convertResult,'ini convertResult')
+    $('#convert').append(`
+        <li class="collection-item avatar">
+            <p>Result: IDR ${convertResult}</p>
+        </li>
+    `)
 }
 
 $('#register-form').click(function(event){
@@ -322,8 +386,10 @@ $(document).ready(function(){
         $('.login').hide()
         $('#register-button').hide()
         $('#logout-button').hide()
+        $('#convert').hide()
     }
     else{
+        $('#convert-title').hide()
         $('.login').hide()
         $('.register').hide()
         $('#register-button').hide()
@@ -331,6 +397,7 @@ $(document).ready(function(){
         $('#logout-button').show()
         $('.content-web').show()
         $('#search-result').hide()
+        $('#convert').hide()
         getCoinData()
         // showAll()
         // showNews()
