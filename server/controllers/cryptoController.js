@@ -4,7 +4,6 @@ class Controller{
     static getCoinDetail(req,res){
         axios({
             method:'get',
-<<<<<<< HEAD
             url:'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=ab5ef428-29ae-4a60-8a99-6df243c5d5e8&limit=10',
         })
         .then(({data}) => {
@@ -25,9 +24,6 @@ class Controller{
         axios({
             method:'get',
             url:`https://pro-api.coinmarketcap.com/v1/cryptocurrency/info?CMC_PRO_API_KEY=ab5ef428-29ae-4a60-8a99-6df243c5d5e8&slug=${req.body.slug}`,
-=======
-            url:'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=4444ccd2-957a-4ad3-8fb1-c2a2de49342b&limit=10',
->>>>>>> convert
         })
         .then(({data}) => {
             res.status(200).json(data.data)
@@ -42,11 +38,7 @@ class Controller{
     static searchCrypto(req,res){
         axios({
             method:'get',
-<<<<<<< HEAD
             url:`https://pro-api.coinmarketcap.com/v1/cryptocurrency/info?CMC_PRO_API_KEY=e9b78dec-342a-428b-b838-8d5680552cbe&slug=${req.query.coin}`,
-=======
-            url:`https://pro-api.coinmarketcap.com/v1/cryptocurrency/info?CMC_PRO_API_KEY=4444ccd2-957a-4ad3-8fb1-c2a2de49342b&slug=${req.body.slug}`,
->>>>>>> convert
         })
         .then(({data}) => {
             res.status(200).json(data.data)
