@@ -6,7 +6,14 @@ const cors = require('cors')
 const routes = require('./routes/index')
 
 const app = express()
-mongoose.connect('mongodb://localhost/cryptohub', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/cryptohub', { useNewUrlParser: true }, (err) => {
+    if(err){
+        console.log(err)
+    }
+    else{
+        console.log('Mongoose connected')
+    }
+})
 
 app.use(cors())
 app.use(express.json())
@@ -17,3 +24,4 @@ app.use('/', routes)
 app.listen(port, () => {
     console.log(`Listening on port: ${port}`)
 })
+
