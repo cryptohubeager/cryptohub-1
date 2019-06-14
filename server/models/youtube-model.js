@@ -6,6 +6,7 @@ const YoutubeSchema = new Schema ({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    videoId: String,
     videoName: String,
     Channel: String,
     coinType: String
