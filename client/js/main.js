@@ -99,6 +99,7 @@ $('#logout-button').click(function(event){
     $('#logout-button').hide()
     $('.register').show()
     $('#login-button').show()
+    signOut()
 })
 
 $('#login-form').click(function(event){
@@ -152,6 +153,44 @@ $('#register-button').click(function(){
     $('#register-button').hide()
 })
 
+function onSignIn(googleUser) {
+    console.log('masuk');
+    const idToken= googleUser.getAuthResponse().id_token
+    $.ajax({
+        url: `http://localhost:3000/glogin`,
+        type: 'post',
+        data: {
+           idToken
+        }
+    })
+    .done(function(data){
+        if (!localStorage.getItem('token')) {
+            Swal.fire({
+                type:'success',
+                title: "Welcome back to cryptohub",
+            })
+        }
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('name', data.name)
+        $('.register').hide()
+        $('.login').hide()
+        $('#login-button').hide()
+        $('#register-button').hide()
+        $('#logout-button').show()
+        $('.content-web').show()
+    })
+    .fail(function(err){
+        console.log(err)
+    })
+}
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+
 $(document).ready(function(){
     console.log('Ready')
     if(!localStorage.getItem('token')){
@@ -161,6 +200,7 @@ $(document).ready(function(){
         $('#logout-button').hide()
     }
     else{
+        
         $('.login').hide()
         $('.register').hide()
         $('#register-button').hide()
