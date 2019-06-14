@@ -31,6 +31,8 @@ function generateApi(query){
         })
     })
     .fail()
+    // console.log(query)
+    listVideo(query)
 }
 
 function getCoinData(){
@@ -278,3 +280,47 @@ $(document).ready(function(){
         // showNews()
     }
 })
+
+
+/* SHOW YOUTUBE VIDEOS */
+function listVideo(coin) {
+        $.ajax({
+            method: "GET",
+            url: `http://localhost:3000/youtube/${coin}`
+        })
+            .done(function(data) {
+                console.log(data)
+                let listVideos = ''
+                let arr = data.items
+                for(let i = 0; i <= arr.length-1; i++) {
+                    let link = arr[i].id.videoId
+                    let title = arr[i].snippet.title
+                    let description = arr[i].snippet.description
+                    let channel = arr[i].snippet.channelTitle
+                    listVideos += `<div class="col-sm-3 card" style="width: 18rem;">
+                    <iframe src="https://www.youtube.com/embed/${link}"></iframe>
+                    <div class="card-body">
+                    <h5 class="card-title">${title}</h5>
+                    <p class="card-text">${description}</p>
+                    </div>
+                    <input type ="submit" class="btn btn-primary saveVideo" style="width:50%;margin:auto;margin-bottom:10px;" value="Save Video">
+                    </div>`
+                }
+    
+                // <a href="https://www.youtube.com/watch?v=${link}" class="btn btn-primary">Watch on YouTube</a>
+                $('.col-sm-3').remove()
+                $('#videos').append(listVideos)
+                saveVideo()
+            })
+            .fail(function(err) {
+                console.log('test')
+                // console.log(err)
+            })
+  
+}
+
+function saveVideo () {
+    $('.saveVideo').click(function() {
+        console.log('test')
+    })
+}

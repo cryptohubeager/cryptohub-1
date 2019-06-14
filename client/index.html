@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Import materialize.css-->
   <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -29,6 +30,11 @@
     .tab {position:absolute;padding-left:10%; }
     .tab-1 {position:absolute;padding-left:30%; }
     .tab-2 {position:absolute;padding-left:70%; }
+
+    iframe {
+      height: 370px; 
+      /* border: 2px solid black; */
+    }
   </style>
   <title>CryptoHub</title>
 </head>
@@ -109,6 +115,12 @@
             
       </div>
       <div class="row" id="read">
+      </div>
+
+      <!-- list youtube videos -->
+      <div id="youtube">
+        <div id="videos" class="row">
+        </div>
       </div>
   </div>
   <!--JavaScript at end of body for optimized loading-->
