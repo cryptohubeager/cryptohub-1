@@ -12,6 +12,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google sign in -->
+  <script src="https://apis.google.com/js/platform.js"></script>
+  <meta name="google-signin-client_id" content="609200085426-quqg76t16oprc2vb5f8jlstnmkcvigkp.apps.googleusercontent.com">
   <style>
     /*** !important was needed for snippet ***/
     /* label focus color */
@@ -24,7 +27,7 @@
       box-shadow: 0 1px 0 0 #1d88e5 !important;
     }
   </style>
-  <title>Holiday Challenge</title>
+  <title>CryptoHub</title>
 </head>
 
 <body style="font-family: 'Quicksand', sans-serif;">
@@ -57,6 +60,8 @@
                   <label for="password">Password</label>
                 </div>
                 <a class="waves-effect blue-grey lighten-1 btn" id="register-form">Register</a>
+                <h5> OR </h5> 
+                <div id="gsignin" class="g-signin2" data-onsuccess="onSignIn"></div>
               </form>
             </div>
           </div>
@@ -81,6 +86,8 @@
                   <label for="password">Password</label>
                 </div>
                 <a class="waves-effect blue-grey lighten-1 btn" id="login-form">Login</a>
+                <h5> OR </h5> 
+                <div id="gsignin" class="g-signin2" data-onsuccess="onSignIn"></div>
               </form>
             </div>
           </div>
