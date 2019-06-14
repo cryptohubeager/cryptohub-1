@@ -1,3 +1,58 @@
+$("#search").submit(()=>{
+    event.preventDefault()
+    const coinName = $('#coinName').val()
+    console.log(coinName)
+    $('#coinName').val('')
+    $('#search-result').show()
+    $.ajax({
+        url:'http://localhost:3000/api/cryptometa',
+        method:'POST',
+        data:{
+            slug:coinName
+        },
+        beforeSend:function(xhr){
+            xhr.setRequestHeader('token', localStorage.getItem('token'))
+        }
+    })
+    .done((response) => {
+        let object = Object.keys(response)
+        let keys = object[0]
+        $('#crypto-search').html(`<li class="collection-item avatar">
+        <img src="${response[keys].logo}" alt="" class="circle">
+        <span class="title">${response[keys].name} [${response[keys].symbol}]</span>
+        <br>
+        <br>
+        <p>
+        ${response[keys].description}
+        </p>
+        <a href="#!" class="secondary-content waves-effect waves-light btn" onclick="generateApi('${response[keys].name}')">Insight<i class="material-icons">chevron_right</i></a>
+        </li>`)   
+    })
+    .fail((jqXHR,textStatus) => {
+        const errMsg = jqXHR.responseJSON.message
+        Swal.fire({
+            type:'error',
+            text:errMsg,
+        })
+    })
+    // $.ajax({
+    //     url:`http://localhost:3000/api/search?coin=${coinName}`,
+    //     method:'GET',
+    //     beforeSend:function(xhr){
+    //         xhr.setRequestHeader('access-token', localStorage.getItem('token'));
+    //     },
+    // })
+    // .done((response) => {
+    //     $('#crypto-search').html(`<li class="collection-item avatar">
+    //     <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3602.png" alt="" class="circle">
+    //     <span class="title">koinku [kk]</span>
+    //     <p>Price in USD 40000.000<br>
+    //     </p>
+    //     <a href="#!" class="secondary-content waves-effect waves-light btn" onclick="generateApi('${crypto.name}')">Insight<i class="material-icons">chevron_right</i></a>
+    //     </li>`)
+    // })
+})
+
 function generateApi(query){
     console.log(query)
     $.ajax({
@@ -275,6 +330,7 @@ $(document).ready(function(){
         $('#login-button').hide()
         $('#logout-button').show()
         $('.content-web').show()
+        $('#search-result').hide()
         getCoinData()
         // showAll()
         // showNews()
